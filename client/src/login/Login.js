@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import image from '../images/pink-guy-png-3.png';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +36,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -57,6 +69,8 @@ export default function Login() {
             name="email"
             autoComplete="email"
             autoFocus
+            defaultValue={formData.email}
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
@@ -68,10 +82,8 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            defaultValue={formData.password}
+            onChange={handleChange}
           />
           <Button
             type="submit"
@@ -80,17 +92,18 @@ export default function Login() {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            {submitting && (
+              <CircularProgress
+                size={24}
+                className={classes.buttonProgress}
+              />
+            )}
+            {submitting ? 'Signing in...' : 'Sign In'}
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
+          <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link href="/register" variant="body2">
+                {"Don't have an account? Register"}
               </Link>
             </Grid>
           </Grid>
