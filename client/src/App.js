@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
     const fetchData = async function () {
       try {
-        await fetch('/api/hello')
+        await fetch('/test/hello')
           .then((res) => res.json())
           .then((hello) => setData(hello));
       } catch (error) {
