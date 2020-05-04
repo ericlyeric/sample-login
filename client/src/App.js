@@ -5,11 +5,11 @@ import Login from './login/Login';
 import Home from './home/Home';
 import PageNotFound from './PageNotFound';
 
-function App() {
+const App = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    const fetchData = async function () {
+    const fetchData = async () => {
       try {
         await fetch('/test/hello')
           .then((res) => res.json())
@@ -40,6 +40,6 @@ function App() {
       </Switch>
     </>
   );
-}
+};
 
 export default App;

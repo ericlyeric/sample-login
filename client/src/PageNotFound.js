@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PageNotFound() {
+const PageNotFound = () => {
   const classes = useStyles();
   return (
     <div className={classes.heroContent}>
@@ -63,4 +63,6 @@ export default function PageNotFound() {
       </Container>
     </div>
   );
-}
+};
+
+export default PageNotFound;

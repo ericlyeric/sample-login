@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+const Login = () => {
   const classes = useStyles();
   const [formData, setFormData] = useState({
     email: '',
@@ -42,13 +42,13 @@ export default function Login() {
   });
   const [submitting, setSubmitting] = useState(false);
 
-  function handleChange(event) {
+  const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -111,4 +111,6 @@ export default function Login() {
       </div>
     </Container>
   );
-}
+};
+
+export default Login;

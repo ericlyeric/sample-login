@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+const SignUp = () => {
   const classes = useStyles();
   const [formData, setFormData] = useState({
     firstName: '',
@@ -51,13 +51,28 @@ export default function SignUp() {
   });
   const [submitting, setSubmitting] = useState(false);
 
-  function handleChange(event) {
+  const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-  }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const { firstName, lastName, email, password } = formData;
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-orgin',
+      body: JSON.stringify({ firstName, lastName, email, password }),
+    });
+    if (response.success) {
+      window.location.replace(response.data);
+      return;
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -67,7 +82,11 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Register
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={handleSubmit}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -150,4 +169,6 @@ export default function SignUp() {
       </div>
     </Container>
   );
-}
+};
+
+export default SignUp;
