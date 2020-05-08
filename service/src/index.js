@@ -1,7 +1,7 @@
 require('dotenv').config();
-const path = require('path');
+// const path = require('path');
 const express = require('express');
-const createError = require('http-errors');
+// const createError = require('http-errors');
 const cors = require('cors');
 var cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -28,14 +28,27 @@ app.use(cookieParser());
 app.use(cors());
 
 app.use(passport.initialize());
+app.use(passport.session());
 
 // add routes here
 app.use('/', indexRouter);
 app.use('/test', helloRouter);
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
+// testing create a new user
+const User = require('./models/user');
+
+const userInput = {
+  username: 'tesuser1',
+  password: '1234567',
+  role: 'admin',
+};
+
+const user = new User(userInput);
+user.save(function (err, document) {
+  if (err) {
+    console.log(err);
+  }
+  console.log(document);
 });
 
 app.listen(port, function () {
