@@ -5,7 +5,7 @@ const express = require('express');
 const cors = require('cors');
 var cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const passport = require('passport');
+// const passport = require('passport');
 
 const connection = require('./models/connection');
 
@@ -14,6 +14,7 @@ const port = process.env.PORT || 3001;
 // routes go here
 var indexRouter = require('./routes/index');
 var helloRouter = require('./routes/hello');
+var userRouter = require('./routes/user');
 
 const app = express();
 
@@ -27,29 +28,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // add routes here
 app.use('/', indexRouter);
 app.use('/test', helloRouter);
-
-// testing create a new user
-const User = require('./models/user');
-
-const userInput = {
-  username: 'tesuser1',
-  password: '1234567',
-  role: 'admin',
-};
-
-const user = new User(userInput);
-user.save(function (err, document) {
-  if (err) {
-    console.log(err);
-  }
-  console.log(document);
-});
+app.use('/user', userRouter);
 
 app.listen(port, function () {
   console.log(
