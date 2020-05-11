@@ -2,6 +2,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 function cookieExtractor(req) {
   let token = null;
@@ -50,3 +51,14 @@ passport.use(
     });
   }),
 );
+
+exports.signToken = function (userId) {
+  return jwt.sign(
+    {
+      iss: 'Saitama',
+      sub: userId,
+    },
+    'Saitama',
+    { expiresIn: '1h' },
+  );
+};
