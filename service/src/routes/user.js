@@ -6,6 +6,17 @@ const passportConfig = require('../auth/local');
 const User = require('../models/user');
 const Todo = require('../models/todo');
 
+function signToken(userId) {
+  return jwt.sign(
+    {
+      iss: 'Saitama',
+      sub: userId,
+    },
+    'Saitama',
+    { expiresIn: '1h' },
+  );
+}
+
 router.post('/register', function (req, res) {
   const { username, password, role } = req.body;
   User.findOne({ username }, function (err, user) {
@@ -40,5 +51,41 @@ router.post('/register', function (req, res) {
     }
   });
 });
+
+// router.post(
+//   '/login',
+//   passport.authenticate('local', { session: false }),
+//   function (req, res) {
+//     if (req.isAuthenticated()) {
+//       const { _id, username, role } = req.user;
+//       const token = signToken(_id);
+//       res.cookie('access_token', token, {
+//         httpOnly: true,
+//         sameSite: true,
+//       });
+//       res
+//         .status(200)
+//         .json({ isAuthenticated: true, user: { username, role } });
+//     }
+//   },
+// );
+
+router.post(
+  '/login',
+  passport.authenticate('local', { session: false }),
+  (req, res) => {
+    if (req.isAuthenticated()) {
+      const { _id, username, role } = req.user;
+      const token = signToken(_id);
+      res.cookie('access_token', token, {
+        httpOnly: true,
+        sameSite: true,
+      });
+      res
+        .status(200)
+        .json({ isAuthenticated: true, user: { username, role } });
+    }
+  },
+);
 
 module.exports = router;

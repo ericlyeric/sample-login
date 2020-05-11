@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const Schema = mongoose.Schema;
-
-const UserSchema = new Schema({
+const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -19,31 +17,33 @@ const UserSchema = new Schema({
     enum: ['user', 'admin'],
     required: true,
   },
-  todos: [{ type: Schema.Types.ObjectId, ref: 'Todo' }],
+  todos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Todo' }],
 });
 
 UserSchema.pre('save', function (next) {
-  if (!this.isModified('password')) {
+  let self = this;
+  if (!self.isModified('password')) {
     return next();
   }
-  bcrypt.hash(this.password, 10, function (err, passwordHash) {
+  bcrypt.hash(self.password, 10, function (err, passwordHash) {
     if (err) {
       return next(err);
     }
-    this.password = passwordHash;
+    self.password = passwordHash;
     next();
   });
 });
 
 UserSchema.methods.comparePassword = function (password, cb) {
-  bcrypt.compare(password, this.password, function (err, isMatch) {
+  let self = this;
+  bcrypt.compare(password, self.password, function (err, isMatch) {
     if (err) {
       return cb(err);
     } else {
       if (!isMatch) {
         return cb(null, isMatch);
       }
-      return cb(null, this);
+      return cb(null, self);
     }
   });
 };
