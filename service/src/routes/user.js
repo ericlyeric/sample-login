@@ -52,28 +52,10 @@ router.post('/register', function (req, res) {
   });
 });
 
-// router.post(
-//   '/login',
-//   passport.authenticate('local', { session: false }),
-//   function (req, res) {
-//     if (req.isAuthenticated()) {
-//       const { _id, username, role } = req.user;
-//       const token = signToken(_id);
-//       res.cookie('access_token', token, {
-//         httpOnly: true,
-//         sameSite: true,
-//       });
-//       res
-//         .status(200)
-//         .json({ isAuthenticated: true, user: { username, role } });
-//     }
-//   },
-// );
-
 router.post(
   '/login',
   passport.authenticate('local', { session: false }),
-  (req, res) => {
+  function (req, res) {
     if (req.isAuthenticated()) {
       const { _id, username, role } = req.user;
       const token = signToken(_id);
@@ -85,6 +67,100 @@ router.post(
         .status(200)
         .json({ isAuthenticated: true, user: { username, role } });
     }
+  },
+);
+
+router.get(
+  '/logout',
+  passport.authenticate('jwt', { session: false }),
+  function (req, res) {
+    res.clearCookie('access_token');
+    res.json({ user: { username: '', role: '' }, success: true });
+  },
+);
+
+router.post(
+  '/todo',
+  passport.authenticate('jwt', { session: false }),
+  function (req, res) {
+    const todo = new Todo(req.body);
+    todo.save(function (err) {
+      if (err) {
+        res.status(500).json({
+          message: { msgBody: 'Error has occured', msgError: true },
+        });
+      } else {
+        req.user.todos.push(todo);
+        req.user.save(function (err) {
+          if (err) {
+            res.status(500).json({
+              message: {
+                msgBody: 'Error has occured',
+                msgError: true,
+              },
+            });
+          } else {
+            res.status(200).json({
+              message: {
+                msgBody: 'Successfully created todo',
+                msgError: false,
+              },
+            });
+          }
+        });
+      }
+    });
+  },
+);
+
+router.get(
+  '/todos',
+  passport.authenticate('jwt', { session: false }),
+  function (req, res) {
+    User.findById({ _id: req.user._id })
+      .populate('todos')
+      .exec(function (err, document) {
+        if (err) {
+          res.status(500).json({
+            message: {
+              msgBody: 'Error has occured',
+              msgError: true,
+            },
+          });
+        } else {
+          res
+            .status(200)
+            .json({ todos: document.todos, isAuthenticated: true });
+        }
+      });
+  },
+);
+
+router.get(
+  '/admin',
+  passport.authenticate('jwt', { session: false }),
+  function (req, res) {
+    if (req.user.role === 'admin') {
+      res.status(200).json({
+        message: { msgBody: 'You are an admin', msgError: false },
+      });
+    } else {
+      res.status(403).json({
+        message: { msgBody: "You're not an admin" },
+        msgError: true,
+      });
+    }
+  },
+);
+
+router.get(
+  '/is-authenticated',
+  passport.authenticate('jwt', { session: false }),
+  function (req, res) {
+    const { username, role } = req.user;
+    res
+      .status(200)
+      .json({ isAuthenticated: true, user: { username, role } });
   },
 );
 
