@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const signToken = require('../auth/local').signToken;
+const signToken = require('../auth/passport').signToken;
 
 exports.auth_register = function (req, res) {
   const { username, password, role } = req.body;

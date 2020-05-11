@@ -34,6 +34,17 @@ passport.use(
   ),
 );
 
+exports.signToken = function (userId) {
+  return jwt.sign(
+    {
+      iss: 'Saitama',
+      sub: userId,
+    },
+    'Saitama',
+    { expiresIn: '1h' },
+  );
+};
+
 // authentication local, username / password logging in
 passport.use(
   new LocalStrategy(function (username, password, done) {
@@ -51,14 +62,3 @@ passport.use(
     });
   }),
 );
-
-exports.signToken = function (userId) {
-  return jwt.sign(
-    {
-      iss: 'Saitama',
-      sub: userId,
-    },
-    'Saitama',
-    { expiresIn: '1h' },
-  );
-};
