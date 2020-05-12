@@ -1,13 +1,16 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import 'typeface-roboto';
 import './index.css';
 import App from './App';
+import AuthProvider from './context/AuthContext';
 
 render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <AuthProvider>
+    <Router>
+      <App />
+    </Router>
+  </AuthProvider>,
   document.getElementById('root'),
 );

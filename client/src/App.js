@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Register from './register/Register';
 import Login from './login/Login';
 import Home from './home/Home';
 import PageNotFound from './PageNotFound';
+import { AuthContext } from './context/AuthContext';
 
 const App = () => {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await fetch('/test/hello')
-          .then((res) => res.json())
-          .then((hello) => setData(hello));
-      } catch (error) {
-        throw error;
-      }
-    };
-    fetchData();
-  }, []);
-
+  const { user, setUser, isAuth, setIsAuth } = useContext(
+    AuthContext,
+  );
+  console.log(isAuth);
   return (
     <>
-      <h1> {data ? data.hello : null}</h1>
+      {user ? (
+        <>
+          <p>User: {JSON.stringify(user)}</p>
+          <p>isAuth: {JSON.stringify(isAuth)}</p>
+        </>
+      ) : null}
       <Switch>
         <Route exact path="/">
           <Home />
