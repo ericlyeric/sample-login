@@ -1,24 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import Navbar from './common/Navbar';
 import Register from './register/Register';
 import Login from './login/Login';
 import Home from './home/Home';
-import PageNotFound from './PageNotFound';
-import { AuthContext } from './context/AuthContext';
+import PageNotFound from '../PageNotFound';
 
 const App = () => {
-  const { user, setUser, isAuth, setIsAuth } = useContext(
-    AuthContext,
-  );
-  console.log(isAuth);
   return (
     <>
-      {user ? (
-        <>
-          <p>User: {JSON.stringify(user)}</p>
-          <p>isAuth: {JSON.stringify(isAuth)}</p>
-        </>
-      ) : null}
+      <Navbar />
       <Switch>
         <Route exact path="/">
           <Home />
