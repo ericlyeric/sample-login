@@ -3,13 +3,14 @@ import React, {
   useState,
   useEffect,
   useMemo,
+  useContext,
 } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { isAuthenticated } from '../api/authApi';
 
-export const AuthContext = createContext(null);
+const AuthContext = createContext();
 
-export default ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,3 +40,15 @@ export default ({ children }) => {
     </>
   );
 };
+
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error(
+      'useAuthContext must be used within the AuthProvider',
+    );
+  }
+  return context;
+};
+
+export default AuthProvider;

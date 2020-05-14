@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,6 +11,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import image from '../../images/pink-guy-png-3.png';
+import { login } from '../../api/authApi';
+import { useAuthContext } from '../../context/AuthContext';
+import Message from '../common/Message';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,12 +39,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = () => {
+  const authContext = useAuthContext();
   const classes = useStyles();
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
+  const [message, setMessage] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  let history = useHistory();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -48,6 +55,22 @@ const Login = () => {
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    login(formData).then((data) => {
+      const { isAuthenticated, user, message } = data;
+      if (isAuthenticated) {
+        setSubmitting(true);
+        authContext.setUser(user);
+        authContext.setIsAuth(isAuthenticated);
+        history.push('/todos');
+      } else {
+        setMessage(message);
+      }
+    });
+    setSubmitting(false);
   };
 
   return (
@@ -58,18 +81,22 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={handleSubmit}
+        >
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
-            defaultValue={formData.email}
+            defaultValue={formData.username}
             onChange={handleChange}
           />
           <TextField
@@ -108,6 +135,7 @@ const Login = () => {
             </Grid>
           </Grid>
         </form>
+        {message ? <Message message={message} /> : null}
       </div>
     </Container>
   );
