@@ -6,12 +6,16 @@ export const login = async (user) => {
       'Content-Type': 'application/json',
     },
   }).then((res) => {
-    if (res.status !== 401) {
+    if (res.status !== 401 && res.status !== 400) {
       return res.json().then((data) => data);
     } else {
       return {
         isAuthenticated: false,
         user: { username: '', role: '' },
+        message: {
+          msgBody: `${res.statusText} ${res.status}`,
+          msgError: true,
+        },
       };
     }
   });

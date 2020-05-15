@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -26,12 +27,14 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
   const { user, setUser, isAuth, setIsAuth } = useAuthContext();
   const classes = useStyles();
+  const history = useHistory();
 
   const handleLogout = () => {
     logout().then((data) => {
       if (data.success) {
         setUser(data.user);
         setIsAuth(false);
+        history.push('/');
       }
     });
   };

@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-// const createError = require('http-errors');
 const cors = require('cors');
 var cookieParser = require('cookie-parser');
 const logger = require('morgan');

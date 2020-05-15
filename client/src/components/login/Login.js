@@ -65,7 +65,7 @@ const Login = () => {
         setSubmitting(true);
         authContext.setUser(user);
         authContext.setIsAuth(isAuthenticated);
-        history.push('/todos');
+        history.push('/todo-list');
       } else {
         setMessage(message);
       }

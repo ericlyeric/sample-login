@@ -4,6 +4,7 @@ import Navbar from './common/Navbar';
 import Register from './register/Register';
 import Login from './login/Login';
 import Home from './home/Home';
+import Todo from './todos/Todo';
 import PageNotFound from '../PageNotFound';
 
 const App = () => {
@@ -19,6 +20,9 @@ const App = () => {
         </Route>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/todo-list">
+          <Todo />
         </Route>
         <Route>
           <PageNotFound />
