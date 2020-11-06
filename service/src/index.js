@@ -1,10 +1,10 @@
-require('dotenv').config();
+require('dotenv').config({path: './src/config/config.env'});
 const express = require('express');
 const cors = require('cors');
 var cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const connection = require('./models/connection');
+const connection = require('./config/connection');
 
 const port = process.env.PORT || 3001;
 
