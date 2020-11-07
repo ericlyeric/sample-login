@@ -1,53 +1,37 @@
+import axios from "axios";
+
 export const login = async (user) => {
-  return fetch('/auth/login', {
-    method: 'post',
-    body: JSON.stringify(user),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }).then((res) => {
-    if (res.status !== 401 && res.status !== 400) {
-      return res.json().then((data) => data);
-    } else {
+  return axios.post('/auth/login', user)
+    .then(res => res.data)
+    .catch(error => {
       return {
         isAuthenticated: false,
         user: { username: '', role: '' },
         message: {
-          msgBody: `${res.statusText} ${res.status}`,
+          msgBody: `${error.statusText} ${error.status}`,
           msgError: true,
         },
-      };
-    }
-  });
+      }
+    })
 };
 
 export const register = async (user) => {
-  return fetch('/auth/register', {
-    method: 'post',
-    body: JSON.stringify(user),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => data);
+  return axios.post('/auth/register', user)
+    .then(res => res.data)
 };
 
 export const logout = async () => {
-  return fetch('/auth/logout')
-    .then((res) => res.json())
-    .then((data) => data);
-};
+  return axios.get('/auth/logout')
+    .then(res => res.data);
+}
 
 export const isAuthenticated = async () => {
-  return fetch('/user/is-authenticated').then((res) => {
-    if (res.status !== 401) {
-      return res.json().then((data) => data);
-    } else {
+  return axios.get('/user/is-authenticated')
+    .then(res => res.data)
+    .catch(() => {
       return {
         isAuthenticated: false,
-        user: { username: '', role: '' },
-      };
-    }
-  });
-};
+        user: {username: '', role: ''}
+      }
+    })
+}
