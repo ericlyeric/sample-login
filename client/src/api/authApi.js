@@ -3,12 +3,12 @@ import axios from "axios";
 export const login = async (user) => {
   return axios.post('/auth/login', user)
     .then(res => res.data)
-    .catch(error => {
+    .catch(() => {
       return {
         isAuthenticated: false,
         user: { username: '', role: '' },
         message: {
-          msgBody: `${error.statusText} ${error.status}`,
+          msgBody: `Invalid username or password`,
           msgError: true,
         },
       }

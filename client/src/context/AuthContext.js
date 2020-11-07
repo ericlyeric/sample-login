@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useContext,
 } from 'react';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Grid } from '@material-ui/core';
 import { isAuthenticated } from '../api/authApi';
 
 const AuthContext = createContext();
@@ -27,11 +27,13 @@ const AuthProvider = ({ children }) => {
       setIsLoading(false);
     });
   }, []);
-
+  
   return (
     <>
       {isLoading ? (
-        <CircularProgress />
+        <Grid container justify="center">
+          <CircularProgress />
+        </Grid>
       ) : (
         <AuthContext.Provider value={providerValue}>
           {children}

@@ -1,9 +1,8 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
-import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from '../../context/AuthContext';
 import { logout } from '../../api/authApi';
@@ -21,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
   link: {
     margin: theme.spacing(1, 1.5),
     color: 'white',
+    textDecoration: 'none'
   },
 }));
 
@@ -46,19 +46,11 @@ const Navbar = () => {
   const authenticatedNavbar = () => {
     return (
       <>
-        <Link
-          variant="button"
-          href="/todo-list"
-          className={classes.link}
-        >
+        <Link to="/todo-list" className={classes.link} >
           Todo List
         </Link>
         {user.role === 'admin' ? (
-          <Link
-            variant="button"
-            href="/admin"
-            className={classes.link}
-          >
+          <Link to="/admin" className={classes.link} >
             Admin
           </Link>
         ) : null}
@@ -84,7 +76,7 @@ const Navbar = () => {
     >
       <Toolbar className={classes.toolbar}>
         <nav>
-          <Link variant="button" href="/" className={classes.link}>
+          <Link to="/" className={classes.link}>
             Home
           </Link>
           {!isAuth ? unauthenticatedNavbar() : authenticatedNavbar()}
