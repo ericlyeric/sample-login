@@ -37,9 +37,7 @@ export default function Home() {
           paragraph
         >
           Sample login application with MongoDb, Express.js, React.js,
-          Node.js, Passport.js. Leverages traditonal username,
-          password login, as well as social identity provider logins
-          (Google, Facebook, Twitter)
+          Node.js, Passport.js. Uses local login strategy.
         </Typography>
         <div className={classes.heroButtons}>
           <Grid container spacing={2} justify="center">

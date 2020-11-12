@@ -9,11 +9,8 @@ import Home from './home/Home';
 import Todo from './todos/Todo';
 import Admin from './admin/Admin';
 import PageNotFound from '../PageNotFound';
-import { useAuthContext } from '../context/AuthContext';
 
 const App = () => {
-  const { isAuth } = useAuthContext();
-
   return (
     <>
       <Navbar />
